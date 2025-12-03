@@ -14,6 +14,16 @@ namespace HotelManagementSystem.Api.Services
 
         public async Task InvokeAsync(HttpContext context, PermissionService permissionService)
         {
+            Console.WriteLine("=================");
+            if (context.Request.Headers.ContainsKey("Authorization"))
+            {
+                string authHeader = context.Request.Headers["Authorization"].ToString();
+                Console.WriteLine($"[HEADER DEBUG] Authorization Header: {authHeader}");
+            }
+            else
+            {
+                Console.WriteLine("[HEADER DEBUG] Authorization Header: NOT FOUND");
+            }
             var endpoint = context.GetEndpoint();
             if (endpoint == null)
             {
@@ -21,11 +31,13 @@ namespace HotelManagementSystem.Api.Services
                 return;
             }
             var requiredPermission = endpoint.Metadata.GetMetadata<RequiredPermissionAttribute>();
+
             if (requiredPermission == null)
             {
                 await _next(context);
                 return;
             }
+            
             var userPerms = context.User.Claims
                 .Where(c => c.Type == "perm")
                 .Select(c => c.Value)

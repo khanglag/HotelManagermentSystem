@@ -124,6 +124,7 @@ D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\HotelMa
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\HotelManagermentSystem.Api.csproj.CoreCompileInputs.cache
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\HotelManagermentSystem.Api.MvcApplicationPartsAssemblyInfo.cs
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\HotelManagermentSystem.Api.MvcApplicationPartsAssemblyInfo.cache
+D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\HotelManagermentSystem.Api.sourcelink.json
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\rjimswa.dswa.cache.json
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json

@@ -19,19 +19,24 @@ namespace HotelManagementSystem.Api.Services
         }
         public string GenerateJwtToken(Account account)
         {
+            // Lấy danh sách quyền
             var permissions = account.AccountPermissions?
                 .Select(p => $"{p.Permission.Method.ToUpper()}:{p.Permission.Path.ToLower()}")
-                .ToList();
+                .ToList() ?? new List<string>();
+
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, account.Username),
                 new Claim("id", account.Id.ToString()),
                 new Claim("role", account.Role.ToString())
             };
+
+            // Thêm quyền vào token
             foreach (var perm in permissions)
             {
                 claims.Add(new Claim("perm", perm));
             }
+
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -57,7 +62,7 @@ namespace HotelManagementSystem.Api.Services
 
         public async Task<Account?> RefreshTokenAsync(string refreshToken, string userName)
         {
-            var account = _accountRepository.GetByUserNameAsync(userName).Result;
+            var account = await _accountRepository.GetByUserNameAsync(userName);
             if (account == null || account.RefreshToken != refreshToken || account.RefreshTokenExpiryTime <= DateTime.UtcNow)
             {
                 return null;

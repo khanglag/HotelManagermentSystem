@@ -25,7 +25,6 @@ namespace HotelManagementSystem.Api.Entities
 
         public Account() 
         {
-            //AccountPermissions = new HashSet<AccountPermission>();
         }
     }
 }
