@@ -38,5 +38,18 @@ namespace HotelManagementSystem.Api.Controllers
                 refreshToken
             });
         }
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] AccountDto dto)
+        {
+            try
+            {
+                await _accountService.RegisterAsync(dto);
+                return Ok(new { message = "Đăng ký thành công" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

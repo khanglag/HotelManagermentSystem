@@ -51,16 +51,13 @@ namespace HotelManagementSystem.Api.Services
         public async Task UpdateAsync(CustomerDto customer)
         {
             var existingCustomer = await _repository.GetByIdAsync(customer.ID);
-            if (existingCustomer == null) throw new KeyNotFoundException("Not foud customer");
-            var entityCustomer = new Customer
-            {
-                Id = customer.ID,
-                Name = customer.Name,
-                Email = customer.Email,
-                PhoneNumber = customer.Phone
-
-            };
-            await _repository.UpdateAsync(entityCustomer);
+            if (existingCustomer == null) throw new KeyNotFoundException("Not found customer");
+            
+            existingCustomer.Name = customer.Name;
+            existingCustomer.Email = customer.Email;
+            existingCustomer.PhoneNumber = customer.Phone;
+            
+            await _repository.UpdateAsync(existingCustomer);
         }
     }
 }

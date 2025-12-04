@@ -63,9 +63,7 @@ namespace HotelManagermentSystem.Api.Repositories
 
         public async Task UpdateAsync(Employee employee)
         {
-            var exitsingEmployee = await _context.Employees.FindAsync(employee.Id);
-            if (exitsingEmployee == null) throw new KeyNotFoundException($"Employee with ID {employee.Id} not found.");
-            _context.Entry(exitsingEmployee).CurrentValues.SetValues(employee);
+            _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
         }
     }

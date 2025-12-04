@@ -42,9 +42,7 @@ namespace HotelManagementSystem.Api.Repositories
 
         public async Task UpdateAsync(Customer customer)
         {
-            var existingCustomer = await _context.Customers.FindAsync(customer.Id);
-            if (existingCustomer == null) throw new KeyNotFoundException($"Customer with ID {customer.Id} not found.");
-            _context.Entry(existingCustomer).CurrentValues.SetValues(customer);
+            _context.Customers.Update(customer);
             await _context.SaveChangesAsync();
         }
     }

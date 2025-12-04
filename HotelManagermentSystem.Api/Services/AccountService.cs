@@ -24,7 +24,7 @@ namespace HotelManagementSystem.Api.Services
                 Id = account.Id,
                 Username = account.Username,
                 Role = account.Role,
-                Exist = account.Status.ToString()
+                Status = account.Status
             };
         }
 
@@ -38,13 +38,20 @@ namespace HotelManagementSystem.Api.Services
             return isPasswordValid ? account : null;
         }
 
-        public async Task RegisterAsync(Account account)
+        public async Task RegisterAsync(AccountDto account)
         {
             var accountExist = await _accountRepository.GetByUserNameAsync(account.Username);
             if (accountExist != null)
                 throw new Exception("Username is alreder exists");
-            account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password);
-            await _accountRepository.RegisterAsync(account);
+
+            var entity = new Account
+            {
+                Username = account.Username,
+                Password = account.Password = BCrypt.Net.BCrypt.HashPassword(account.Password),
+                Role = account.Role,
+                Status = account.Status
+            };
+            await _accountRepository.RegisterAsync(entity);
         }
 
         public Task UpdateAsync(Account account)
