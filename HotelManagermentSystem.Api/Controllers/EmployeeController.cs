@@ -1,6 +1,4 @@
-﻿using HotelManagementSystem.Api.Services;
-using HotelManagementSystem.Api.Services.IServices;
-using HotelManagermentSystem.Api.Dtos;
+﻿using HotelManagermentSystem.Api.Dtos;
 using HotelManagermentSystem.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -26,6 +26,7 @@ namespace HotelManagementSystem.Api.Data
         public DbSet<RoomType> RoomTypes { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<ServiceUsage> ServiceUsages { get; set; }
+        public DbSet<GuestProfile> GuestProfiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

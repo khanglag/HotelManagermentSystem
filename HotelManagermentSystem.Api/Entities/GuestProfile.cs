@@ -15,8 +15,8 @@ namespace HotelManagementSystem.Api.Entities
         public string Email { get; set; }
         [StringLength(15)]
         public string PhoneNumber { get; set; } 
-        public DateTime DateOfBirth { get; set; }
-        public string IDNumber { get; set; }
+        public DateOnly DayOfBirth { get; set; }
+        public string INumber { get; set; }
         [Required]
         public int ReservationDetailId { get; set; }
 
