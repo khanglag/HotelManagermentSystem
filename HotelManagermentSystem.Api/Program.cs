@@ -69,8 +69,17 @@ builder.Services.AddControllers();
 //}
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazor", policy =>
+        policy.WithOrigins("https://localhost:7254") // Điền Port của project Blazor vào đây
+              .AllowAnyMethod()
+              .AllowAnyHeader());
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowBlazor");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -81,34 +90,35 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var db = services.GetRequiredService<AppDbContext>();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    try
+//    {
+//        var db = services.GetRequiredService<AppDbContext>();
 
-        // ⚠️ Chỉ nên dùng EnsureDeleted/EnsureCreated trong môi trường phát triển/test
-        db.Database.EnsureDeleted(); // Xóa database cũ
-        db.Database.EnsureCreated(); // Tạo database mới
+//        // ⚠️ Chỉ nên dùng EnsureDeleted/EnsureCreated trong môi trường phát triển/test
+//        db.Database.EnsureDeleted(); // Xóa database cũ
+//        db.Database.EnsureCreated(); // Tạo database mới
 
-        // Gọi hàm Seed để đổ dữ liệu mẫu
-        DbSeeder.Seed(db);
+//        // Gọi hàm Seed để đổ dữ liệu mẫu
+//        DbSeeder.Seed(db);
 
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogInformation("Database successfully seeded.");
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding the database.");
-    }
-}
+//        var logger = services.GetRequiredService<ILogger<Program>>();
+//        logger.LogInformation("Database successfully seeded.");
+//    }
+//    catch (Exception ex)
+//    {
+//        var logger = services.GetRequiredService<ILogger<Program>>();
+//        logger.LogError(ex, "An error occurred while seeding the database.");
+//    }
+//}
 app.UseRouting();
 
 app.UseAuthentication();
-app.UseMiddleware<PermissionMiddleware>();
 app.UseAuthorization();
+app.UseMiddleware<PermissionMiddleware>();
+
 
 
 

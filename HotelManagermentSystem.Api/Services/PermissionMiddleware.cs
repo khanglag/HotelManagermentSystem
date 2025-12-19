@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelManagementSystem.Api.Services
 {
@@ -12,8 +13,16 @@ namespace HotelManagementSystem.Api.Services
             _next = next;
         }
 
-        public async Task InvokeAsync(HttpContext context, PermissionService permissionService)
+        public async Task InvokeAsync(HttpContext context, IPermissionService permissionService)
         {
+            var path = context.Request.Path.Value;
+            Console.WriteLine(path);
+            // Bỏ qua kiểm tra nếu là trang Login
+            if (path != null && path.Contains("/Account/login"))
+            {
+                await _next(context);
+                return;
+            }
             Console.WriteLine("=================");
             if (context.Request.Headers.ContainsKey("Authorization"))
             {
@@ -25,7 +34,7 @@ namespace HotelManagementSystem.Api.Services
                 Console.WriteLine("[HEADER DEBUG] Authorization Header: NOT FOUND");
             }
             var endpoint = context.GetEndpoint();
-            if (endpoint == null)
+            if (endpoint?.Metadata.GetMetadata<AllowAnonymousAttribute>() != null)
             {
                 await _next(context);
                 return;

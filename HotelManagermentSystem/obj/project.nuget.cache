@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "FPeyOXX3Wwk=",
+  "dgSpecHash": "sdnXhqF5p3o=",
   "success": true,
   "projectFilePath": "D:\\Cs\\HotelManagermentSystem\\HotelManagermentSystem\\HotelManagermentSystem.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\khang\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.0\\microsoft.aspnetcore.app.internal.assets.10.0.0.nupkg.sha512"
+    "C:\\Users\\khang\\.nuget\\packages\\blazored.localstorage\\4.5.0\\blazored.localstorage.4.5.0.nupkg.sha512",
+    "C:\\Users\\khang\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.1\\microsoft.aspnetcore.app.internal.assets.10.0.1.nupkg.sha512"
   ],
   "logs": []
 }

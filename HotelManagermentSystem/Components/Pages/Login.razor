@@ -1,0 +1,81 @@
+﻿@page "/login"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@inject IAuthService AuthService
+@inject NavigationManager NavigationManager
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow border-0">
+                <div class="card-body p-5">
+                    <h3 class="text-center mb-4">Hotel Management</h3>
+
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger">@errorMessage</div>
+                    }
+
+                    <EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="LoginForm" Enhance="false">
+                        <DataAnnotationsValidator />
+
+                        <div class="mb-3">
+                            <label class="form-label">Tài khoản</label>
+                            <InputText @bind-Value="loginModel.Username" class="form-control" placeholder="Nhập tên đăng nhập" />
+                            <ValidationMessage For="@(() => loginModel.Username)" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Mật khẩu</label>
+                            <InputText @bind-Value="loginModel.Password" type="password" class="form-control" placeholder="Nhập mật khẩu" />
+                            <ValidationMessage For="@(() => loginModel.Password)" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100" disabled="@isSubmitting">
+                            @if (isSubmitting)
+                            {
+                                <span class="spinner-border spinner-border-sm"></span>
+                            }
+                            else
+                            {
+                                <span>Đăng nhập</span>
+                            }
+                        </button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private LoginDto loginModel { get; set; } = new();
+    private string errorMessage = "";
+    private bool isSubmitting = false;
+
+    private async Task HandleLogin()
+    {
+        isSubmitting = true;
+        errorMessage = "";
+
+        // Tạo một object sạch, không chứa tiền tố "loginModel."
+        var cleanModel = new LoginDto
+        {
+            Username = loginModel.Username,
+            Password = loginModel.Password
+        };
+
+        // Gọi service
+        var result = await AuthService.Login(cleanModel);
+
+        if (result)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            errorMessage = "Sai tên đăng nhập hoặc mật khẩu.";
+        }
+        isSubmitting = false;
+    }
+}

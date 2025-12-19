@@ -1,6 +1,7 @@
 ﻿using HotelManagementSystem.Api.Dtos;
 using HotelManagementSystem.Api.Entities;
 using HotelManagementSystem.Api.Services.IService;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HotelManagementSystem.Api.Controllers
@@ -19,10 +20,19 @@ namespace HotelManagementSystem.Api.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var account = await _accountService.LoginAsync(dto.Username, dto.Password);
+            Console.WriteLine("===============");
+            Console.WriteLine($"Login Attempt: User={dto.Username}, Pass={dto.Password}");
 
+            if (string.IsNullOrEmpty(dto.Username) || string.IsNullOrEmpty(dto.Password))
+            {
+                return BadRequest("Username and Password are required.");
+            }
+            var account = await _accountService.LoginAsync(dto.Username, dto.Password);
+            Console.WriteLine(dto.Username);
+            Console.WriteLine(dto.Password);
             if (account == null)
                 return Unauthorized(new { message = "Đăng nhập thất bại" });
             
@@ -39,6 +49,7 @@ namespace HotelManagementSystem.Api.Controllers
             });
         }
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> Register([FromBody] AccountDto dto)
         {
             try
