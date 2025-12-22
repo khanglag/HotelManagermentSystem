@@ -27,11 +27,11 @@ namespace HotelManagermentSystem.Services
 
                 // Chỉ định rõ: "sub" là Name và "role" là Role
                 var identity = new ClaimsIdentity(
-     claims,
-     "jwt",
-     ClaimTypes.Name,
-     ClaimTypes.Role
- );
+                     claims,
+                     "jwt",
+                     ClaimTypes.Name,
+                     ClaimTypes.Role
+                 );
                 var user = new ClaimsPrincipal(identity);
 
                 return new AuthenticationState(user);
@@ -47,11 +47,11 @@ namespace HotelManagermentSystem.Services
         {
             var claims = JwtParser.ParseClaimsFromJwt(token);
             var identity = new ClaimsIdentity(
-    claims,
-    "jwt",
-    ClaimTypes.Name,
-    ClaimTypes.Role
-);
+                claims,
+                "jwt",
+                ClaimTypes.Name,
+                ClaimTypes.Role
+            );
             var user = new ClaimsPrincipal(identity);
             var authState = Task.FromResult(new AuthenticationState(user));
             NotifyAuthenticationStateChanged(authState);
