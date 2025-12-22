@@ -1,0 +1,56 @@
+﻿@page "/Employee"
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<h3>Employee</h3>
+
+<AuthorizeView>
+    <Authorized Context="auth">
+        <p><b>User:</b> @auth.User.Identity?.Name</p>
+        <p><b>Role:</b> @auth.User.FindFirst(ClaimTypes.Role)?.Value</p>
+
+        <h5>Permissions (perm trong JWT)</h5>
+
+        @if (permissions.Count == 0)
+        {
+            <p class="text-muted">Không có quyền nào.</p>
+        }
+        else
+        {
+            <ul class="list-group">
+                @foreach (var perm in permissions)
+                {
+                    <li class="list-group-item">@perm</li>
+                }
+            </ul>
+        }
+    </Authorized>
+
+    <NotAuthorized>
+        <p>Bạn chưa đăng nhập.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<string> permissions = new();
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? AuthenticationStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateTask!;
+        var user = authState.User;
+
+        if (!user.Identity?.IsAuthenticated ?? true)
+            return;
+
+        // 👉 Lấy perm từ JWT
+        // Trường hợp 1: mỗi perm là 1 claim riêng
+        permissions = user.Claims
+            .Where(c => c.Type == "perm")
+            .Select(c => c.Value)
+            .ToList();
+    }
+}

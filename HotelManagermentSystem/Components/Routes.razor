@@ -1,6 +1,53 @@
-﻿<Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Pages.NotFound)">
-    <Found Context="routeData">
-        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)" />
-        <FocusOnNavigate RouteData="routeData" Selector="h1" />
-    </Found>
-</Router>
+﻿@* <CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+
+            @if (routeData.PageType == typeof(Pages.Login))
+            {
+                <RouteView RouteData="@routeData"
+                           DefaultLayout="@typeof(Layout.MainLayout)" />
+            }
+            else
+            {
+                <AuthorizeRouteView RouteData="@routeData"
+                                    DefaultLayout="@typeof(Layout.MainLayout)">
+                    <NotAuthorized>
+                        <LayoutView Layout="@typeof(Layout.MainLayout)">
+                            <a href="/login">Đi đến đăng nhập</a>
+                        </LayoutView>
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+            }
+
+        </Found>
+    </Router>
+</CascadingAuthenticationState> *@
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+
+            @if (routeData.PageType == typeof(Pages.Login))
+            {
+                <RouteView RouteData="@routeData"
+                           DefaultLayout="@typeof(Layout.MainLayout)" />
+            }
+            else if (routeData.PageType.GetCustomAttributes(typeof(AuthorizeAttribute), true).Any())
+            {
+                <AuthorizeRouteView RouteData="@routeData"
+                                    DefaultLayout="@typeof(Layout.MainLayout)">
+                    <NotAuthorized>
+                        <LayoutView Layout="@typeof(Layout.MainLayout)">
+                            <a href="/login">Đi đến đăng nhập</a>
+                        </LayoutView>
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+            }
+            else
+            {
+                <RouteView RouteData="@routeData"
+                           DefaultLayout="@typeof(Layout.MainLayout)" />
+            }
+
+        </Found>
+    </Router>
+</CascadingAuthenticationState>

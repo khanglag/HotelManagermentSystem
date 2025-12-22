@@ -1,30 +1,31 @@
 ﻿using Blazored.LocalStorage;
 using HotelManagermentSystem.Components;
 using HotelManagermentSystem.Services;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- PHẦN 1: ĐĂNG KÝ SERVICES (Dòng này phải ở trên cùng) ---
-
+// --- 1. ĐĂNG KÝ SERVICES ---
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Đăng ký thư viện LocalStorage
+// Thêm dịch vụ Antiforgery (Bắt buộc nếu dùng Form hoặc các trang có Metadata này)
+builder.Services.AddAntiforgery();
+
+
+builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddBlazoredLocalStorage();
 
-// Đăng ký AuthService của bạn
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7156/") });
 
-// Cấu hình HttpClient với URL API của bạn
-builder.Services.AddScoped(sp => new HttpClient
-{
-    BaseAddress = new Uri("https://localhost:7156/")
-});
+builder.Services.AddScoped<ApiAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
+    sp.GetRequiredService<ApiAuthenticationStateProvider>());
 
-// --- PHẦN 2: BUILD APP ---
 var app = builder.Build();
 
-// --- PHẦN 3: CẤU HÌNH PIPELINE (Middleware) ---
+// --- 2. CẤU HÌNH PIPELINE (THỨ TỰ QUAN TRỌNG TẠI ĐÂY) ---
 
 if (!app.Environment.IsDevelopment())
 {
@@ -32,13 +33,17 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseStatusCodePagesWithReExecute("/not-found");
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
-// Antiforgery phải nằm trước MapRazorComponents
-app.UseAntiforgery();
+// QUAN TRỌNG: UseStatusCodePages phải nằm TRƯỚC Routing để bắt được các lỗi 404
+app.UseStatusCodePagesWithReExecute("/not-found");
 
-app.MapStaticAssets();
+app.UseRouting();
+
+
+app.UseAntiforgery(); // Đặt ngay sau Authorization và trước Map endpoints
+
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

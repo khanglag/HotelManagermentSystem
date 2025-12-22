@@ -1,7 +1,13 @@
 ﻿@page "/login"
+@using Microsoft.AspNetCore.Authorization
+@attribute [AllowAnonymous]
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.Authorization
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 @inject IAuthService AuthService
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthStateProvider
+@inject IJSRuntime JS
 
 <div class="container mt-5">
     <div class="row justify-content-center">
@@ -70,7 +76,22 @@
 
         if (result)
         {
-            NavigationManager.NavigateTo("/");
+            var token = await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
+            if (!string.IsNullOrEmpty(token))
+            {
+
+                ((ApiAuthenticationStateProvider)AuthStateProvider).MarkUserAsAuthenticated(token);
+                var claims = JwtParser.ParseClaimsFromJwt(token);
+                var roleClaim = claims.FirstOrDefault(c => c.Type == "role")?.Value;
+                if (roleClaim == "CUSTOMER")
+                {
+                    NavigationManager.NavigateTo("/Customer", forceLoad: true);
+                }
+                else
+                {
+                    NavigationManager.NavigateTo("/Employee", forceLoad: true);
+                }
+            }
         }
         else
         {

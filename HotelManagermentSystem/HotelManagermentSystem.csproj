@@ -9,6 +9,14 @@
 
   <ItemGroup>
     <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+	  <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.0.0" />
+
+	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\Responses\" />
+    <Folder Include="Models\Requests\" />
   </ItemGroup>
 
 </Project>
