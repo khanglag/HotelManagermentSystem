@@ -1,4 +1,4 @@
-﻿namespace HotelManagermentSystem.Models
+﻿namespace HotelManagermentSystem.Models.Requests
 {
     public class LoginDto
     {

@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@using HotelManagermentSystem.Models.Requests
 @using Microsoft.AspNetCore.Authorization
 @attribute [AllowAnonymous]
 @using System.Security.Claims
@@ -74,29 +75,35 @@
         // Gọi service
         var result = await AuthService.Login(cleanModel);
 
-        if (result)
-        {
-            var token = await JS.InvokeAsync<string>("localStorage.getItem", "authToken");
-            if (!string.IsNullOrEmpty(token))
-            {
-
-                ((ApiAuthenticationStateProvider)AuthStateProvider).MarkUserAsAuthenticated(token);
-                var claims = JwtParser.ParseClaimsFromJwt(token);
-                var roleClaim = claims.FirstOrDefault(c => c.Type == "role")?.Value;
-                if (roleClaim == "CUSTOMER")
-                {
-                    NavigationManager.NavigateTo("/Customer", forceLoad: true);
-                }
-                else
-                {
-                    NavigationManager.NavigateTo("/Employee", forceLoad: true);
-                }
-            }
-        }
-        else
+        if (result is null)
         {
             errorMessage = "Sai tên đăng nhập hoặc mật khẩu.";
+            isSubmitting = false;
+            return;
         }
+
+        // LƯU TOKEN
+        await JS.InvokeVoidAsync(
+            "localStorage.setItem",
+            "authToken",
+            result.Token);
+
+        await JS.InvokeVoidAsync(
+            "localStorage.setItem",
+            "refreshToken",
+            result.RefreshToken);
+
+        // BÁO AUTH STATE
+        ((ApiAuthenticationStateProvider)AuthStateProvider)
+            .MarkUserAsAuthenticated(result.Token);
+
+        var claims = JwtParser.ParseClaimsFromJwt(result.Token);
+        var role = claims.FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?.Value;
+
+        NavigationManager.NavigateTo(
+            role == "CUSTOMER" ? "/Customer" : "/Employee"
+            );
+
         isSubmitting = false;
     }
 }

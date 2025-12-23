@@ -1,46 +1,33 @@
-﻿using Blazored.LocalStorage;
-using HotelManagermentSystem.Models;
+﻿using HotelManagermentSystem.Models.Requests;
+using HotelManagermentSystem.Models.Responses;
 
 namespace HotelManagermentSystem.Services
 {
     public class AuthService : IAuthService
     {
         private readonly HttpClient _httpClient;
-        private readonly ILocalStorageService _localStorage;
 
-        public AuthService(HttpClient httpClient, ILocalStorageService localStorage)
+        public AuthService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _localStorage = localStorage;
         }
 
-        public async Task<bool> Login(LoginDto loginDto)
+        public async Task<LoginResponse?> Login(LoginDto loginDto)
         {
-            var response = await _httpClient.PostAsJsonAsync("api/Account/login", loginDto);
+            var response = await _httpClient
+                .PostAsJsonAsync("api/Account/login", loginDto);
 
-            Console.WriteLine($"StatusCode: {response.StatusCode}");
+            if (!response.IsSuccessStatusCode)
+                return null;
 
-            var raw = await response.Content.ReadAsStringAsync();
-            Console.WriteLine($"Raw response: {raw}");
-
-            if (!response.IsSuccessStatusCode) return false;
-
-            var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-
-            if (result != null)
-            {
-                await _localStorage.SetItemAsync("authToken", result.Token);
-                await _localStorage.SetItemAsync("refreshToken", result.RefreshToken);
-                return true;
-            }
-
-            return false;
+            return await response.Content
+                .ReadFromJsonAsync<LoginResponse>();
         }
 
         public async Task Logout()
         {
-            await _localStorage.RemoveItemAsync("authToken");
-            await _localStorage.RemoveItemAsync("refreshToken");
+            // để trống – logout xử lý ở UI
+            await Task.CompletedTask;
         }
     }
 }

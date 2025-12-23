@@ -1,4 +1,5 @@
-﻿using HotelManagermentSystem.Api.Dtos;
+﻿using HotelManagementSystem.Api.Services;
+using HotelManagermentSystem.Api.Dtos;
 using HotelManagermentSystem.Api.Services.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace HotelManagermentSystem.Api.Controllers
             _employeeService = employeeService;
         }
         [HttpGet]
-        //[RequiredPermission("GET:/api/employee")]
+        [RequiredPermission("GET:/api/employee")]
         public async Task<IActionResult> GetAll()
         {
             var employees = await _employeeService.GetAllAsync();
@@ -23,7 +24,7 @@ namespace HotelManagermentSystem.Api.Controllers
         }
         [HttpGet]
         [Route("by-name/{name}")]
-        //[RequiredPermission("GET:/api/employee")]
+        [RequiredPermission("GET:/api/employee")]
         public async Task<IActionResult> GetByName(string name)
         {
             var employees = await _employeeService.GetEmployeeByNameAsync(name);
@@ -31,7 +32,7 @@ namespace HotelManagermentSystem.Api.Controllers
         }
         [HttpGet]
         [Route("by-branch/{branchId:int}")]
-        //[RequiredPermission("GET:/api/employee")]
+        [RequiredPermission("GET:/api/employee")]
         public async Task<IActionResult> GetByBranch(int branchId)
         {
             var employees = await _employeeService.GetEmployeeByBranchAsync(branchId);
@@ -39,14 +40,14 @@ namespace HotelManagermentSystem.Api.Controllers
         }
         [HttpGet]
         [Route("by-name-and-branch")]
-        //[RequiredPermission("GET:/api/employee")]
+        [RequiredPermission("GET:/api/employee")]
         public async Task<IActionResult> GetByNameAndBranch([FromQuery] string name, [FromQuery] int branchId)
         {
             var employees = await _employeeService.GetEmployeesByNameAndBranchAsync(name, branchId);
             return Ok(employees);
         }
         [HttpGet("{id:int}")]
-        //[RequiredPermission("GET:/api/employee")]
+        [RequiredPermission("GET:/api/employee")]
         public async Task<IActionResult> GetById(int id)
         {
             var employee = await _employeeService.GetByIdAsync(id);
@@ -55,14 +56,14 @@ namespace HotelManagermentSystem.Api.Controllers
             return Ok(employee);
         }
         [HttpPost]
-        //[RequiredPermission("POST:/api/employee")]
+        [RequiredPermission("POST:/api/employee")]
         public async Task<IActionResult> Create(EmployeeDto employee)
         {
             await _employeeService.AddAsync(employee);
             return Ok(new { message = "Add Successful" });
         }
         [HttpPut("{id}")]
-        //[RequiredPermission("PUT:/api/employee")]
+        [RequiredPermission("PUT:/api/employee")]
         public async Task<IActionResult> Update(int id, EmployeeDto employee)
         {
             if (id != employee.Id)
@@ -78,7 +79,7 @@ namespace HotelManagermentSystem.Api.Controllers
             if (userClaims == null) return NotFound();
             var idClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "id");
 
-            if (idClaim == null) return NotFound("ID Claim not found in token."); 
+            if (idClaim == null) return NotFound("ID Claim not found in token.");
             int idUser = -1;
             if (int.TryParse(idClaim.Value, out idUser))
             {
@@ -90,5 +91,5 @@ namespace HotelManagermentSystem.Api.Controllers
 
             return BadRequest("User ID in token is not a valid integer.");
         }
-    } 
+    }
 }

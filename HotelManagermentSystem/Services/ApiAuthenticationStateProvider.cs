@@ -8,10 +8,13 @@ namespace HotelManagermentSystem.Services
     {
         private readonly IJSRuntime _jsRuntime;
         private readonly ClaimsPrincipal _anonymous = new ClaimsPrincipal(new ClaimsIdentity());
-
-        public ApiAuthenticationStateProvider(IJSRuntime jsRuntime)
+        private readonly ITokenService _tokenService;
+        public ApiAuthenticationStateProvider(
+            IJSRuntime jsRuntime,
+            ITokenService tokenService)
         {
             _jsRuntime = jsRuntime;
+            _tokenService = tokenService;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
@@ -22,6 +25,8 @@ namespace HotelManagermentSystem.Services
 
                 if (string.IsNullOrWhiteSpace(token))
                     return new AuthenticationState(_anonymous);
+
+                _tokenService.Token = token;
 
                 var claims = JwtParser.ParseClaimsFromJwt(token);
 
@@ -45,6 +50,8 @@ namespace HotelManagermentSystem.Services
         // Hàm này gọi sau khi login thành công để báo cho UI cập nhật
         public void MarkUserAsAuthenticated(string token)
         {
+            _tokenService.Token = token;
+
             var claims = JwtParser.ParseClaimsFromJwt(token);
             var identity = new ClaimsIdentity(
                 claims,
@@ -59,6 +66,7 @@ namespace HotelManagermentSystem.Services
 
         public void MarkUserAsLoggedOut()
         {
+            _tokenService.Token = null;
             var authState = Task.FromResult(new AuthenticationState(_anonymous));
             NotifyAuthenticationStateChanged(authState);
         }

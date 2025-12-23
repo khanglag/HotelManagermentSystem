@@ -2,10 +2,8 @@
 using HotelManagementSystem.Api.Extensions;
 using HotelManagementSystem.Api.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Microsoft.IdentityModel.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
 var jwtSettings = builder.Configuration.GetSection("Jwt");
@@ -14,17 +12,17 @@ var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]);
 
 builder.Services.AddSwaggerGen(opt =>
 {
-opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotel", Version = "v1" });
-opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-{
-    In = ParameterLocation.Header,
-    Description = "Please enter token",
-    Name = "Authorization",
-    Type = SecuritySchemeType.Http,
-    BearerFormat = "JWT",
-    Scheme = "Bearer"
-});
-opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotel", Version = "v1" });
+    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
+    });
+    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
            {
        {
            new OpenApiSecurityScheme

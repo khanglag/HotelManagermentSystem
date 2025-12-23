@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace HotelManagermentSystem.Models
+namespace HotelManagermentSystem.Models.Responses
 {
     public class LoginResponse
     {

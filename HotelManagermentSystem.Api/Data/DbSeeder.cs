@@ -1,10 +1,5 @@
-﻿using BCrypt.Net;
-using HotelManagementSystem.Api.Data;
-using HotelManagementSystem.Api.Entities;
+﻿using HotelManagementSystem.Api.Entities;
 using HotelManagementSystem.Api.Enums;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace HotelManagementSystem.Api.Data
 {
@@ -46,7 +41,11 @@ namespace HotelManagementSystem.Api.Data
                 new Permission { Path = "/api/customer", Method = "PUT", Description = "Cập nhật khách hàng" },
                 new Permission { Path = "/api/customer/by-email", Method = "GET", Description = "Tìm kiếm khách hàng theo email" },
                 new Permission { Path = "/api/customer/by-phone", Method = "GET", Description = "Tìm khách hàng theo số điện thoại" },
-
+                new Permission { Path = "/api/employee", Method = "POST", Description = "Thêm nhân viên" },
+                new Permission { Path = "/api/employee", Method = "GET", Description = "Xem danh sách nhân viên" },
+                new Permission { Path = "/api/employee", Method = "PUT", Description = "Cập nhật nhân viên" },
+                new Permission { Path = "/api/employee/by-email", Method = "GET", Description = "Tìm kiếm nhân viên theo email" },
+                new Permission { Path = "/api/employee/by-phone", Method = "GET", Description = "Tìm nhân viên theo số điện thoại" },
             };
             context.Permissions.AddRange(permissions);
             context.SaveChanges();

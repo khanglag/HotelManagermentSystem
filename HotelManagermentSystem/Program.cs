@@ -1,32 +1,42 @@
 ﻿using Blazored.LocalStorage;
 using HotelManagermentSystem.Components;
 using HotelManagermentSystem.Services;
+using HotelManagermentSystem.Services.EmployeeServices;
 using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- 1. ĐĂNG KÝ SERVICES ---
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-// Thêm dịch vụ Antiforgery (Bắt buộc nếu dùng Form hoặc các trang có Metadata này)
 builder.Services.AddAntiforgery();
-
-
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddBlazoredLocalStorage();
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7156/") });
+// ===== AUTH CORE =====
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 builder.Services.AddScoped<ApiAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
     sp.GetRequiredService<ApiAuthenticationStateProvider>());
 
+// ===== HTTP =====
+builder.Services.AddTransient<JwtAuthorizationHandler>();
+
+builder.Services.AddHttpClient<IEmployeeManagementService, EmployeeManagementService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7156/");
+})
+.AddHttpMessageHandler<JwtAuthorizationHandler>();
+
+builder.Services.AddHttpClient<IAuthService, AuthService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7156/");
+});
+
 var app = builder.Build();
 
-// --- 2. CẤU HÌNH PIPELINE (THỨ TỰ QUAN TRỌNG TẠI ĐÂY) ---
-
+// ===== PIPELINE =====
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
@@ -35,14 +45,9 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
-// QUAN TRỌNG: UseStatusCodePages phải nằm TRƯỚC Routing để bắt được các lỗi 404
 app.UseStatusCodePagesWithReExecute("/not-found");
-
 app.UseRouting();
-
-
-app.UseAntiforgery(); // Đặt ngay sau Authorization và trước Map endpoints
+app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();

@@ -1,10 +1,11 @@
-﻿using HotelManagermentSystem.Models;
+﻿using HotelManagermentSystem.Models.Requests;
+using HotelManagermentSystem.Models.Responses;
 
 namespace HotelManagermentSystem.Services
 {
     public interface IAuthService
     {
-        Task<bool> Login(LoginDto loginDto);
+        Task<LoginResponse?> Login(LoginDto loginDto);
         Task Logout();
     }
 }
