@@ -1,0 +1,64 @@
+﻿@page "/Employee/EmployeeManagement"
+@inject IEmployeeManagementService EmployeeService
+@using HotelManagermentSystem.View.Models.Requests
+@using HotelManagermentSystem.View.Services.EmployeeServices
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@attribute [Authorize(Roles = "ADMIN")]
+
+<h3>Employee Management</h3>
+
+<AuthorizeView>
+    <Authorized>
+        <h3>Danh sách nhân viên</h3>
+
+        @if (employees == null)
+        {
+            <p><em>Đang tải...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên</th>
+                        <th>Chi nhánh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var emp in employees)
+                    {
+                        <tr>
+                            <td>@emp.Id</td>
+                            <td>@emp.Name</td>
+                            <td>@emp.BranchId</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </Authorized>
+
+    <NotAuthorized>
+        <p class="text-danger">Bạn không có quyền truy cập.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<EmployeeDto>? employees;
+    private bool _loaded;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        
+        // ❗ Chỉ load 1 lần và CHỈ khi Authorized
+        if (!_loaded)
+        {
+            _loaded = true;
+            employees = await EmployeeService.GetAllAsync();
+            StateHasChanged();
+        }
+    }
+}

@@ -7,7 +7,7 @@
         "Action": "Start"
       },
       {
-        "Path": "HotelManagermentSystem\\HotelManagermentSystem.csproj",
+        "Path": "HotelManagementSystem.View\\HotelManagementSystem.View\\HotelManagementSystem.View.csproj",
         "Action": "Start"
       }
     ]

@@ -141,3 +141,10 @@ D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\refint\
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\HotelManagermentSystem.Api.pdb
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\HotelManagermentSystem.Api.genruntimeconfig.cache
 D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\obj\Debug\net8.0\ref\HotelManagermentSystem.Api.dll
+D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\bin\Debug\net8.0\Microsoft.Extensions.Caching.Memory.dll
+D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
+D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
+D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+D:\Cs\HotelManagermentSystem\HotelManagermentSystem.Api\bin\Debug\net8.0\System.ClientModel.dll

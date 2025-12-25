@@ -1,0 +1,4 @@
+wwwroot\appsettings.Development.json
+wwwroot\appsettings.json
+D:\Cs\HotelManagermentSystem\HotelManagementSystem.View\HotelManagementSystem.View.Client\wwwroot\appsettings.Development.json
+D:\Cs\HotelManagermentSystem\HotelManagementSystem.View\HotelManagementSystem.View.Client\wwwroot\appsettings.json

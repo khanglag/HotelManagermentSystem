@@ -4,6 +4,7 @@
 @using HotelManagermentSystem.Services.EmployeeServices
 @using Microsoft.AspNetCore.Components.Authorization
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
+@attribute [Authorize(Roles = "ADMIN")]
 
 <h3>Employee Management</h3>
 

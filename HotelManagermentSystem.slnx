@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="HotelManagementSystem.View/HotelManagementSystem.View.Client/HotelManagementSystem.View.Client.csproj" Id="21e39b2f-2f01-4758-be94-287a8fe3971a" />
+  <Project Path="HotelManagementSystem.View/HotelManagementSystem.View/HotelManagementSystem.View.csproj" Id="6592d276-6c41-4c8c-b58b-ea54bf447608" />
   <Project Path="HotelManagermentSystem.Api/HotelManagermentSystem.Api.csproj" />
   <Project Path="HotelManagermentSystem/HotelManagermentSystem.csproj" />
 </Solution>

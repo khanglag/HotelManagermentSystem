@@ -1,5 +1,4 @@
 ﻿using HotelManagementSystem.Api.Dtos;
-using HotelManagementSystem.Api.Entities;
 using HotelManagementSystem.Api.Services.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,13 +34,14 @@ namespace HotelManagementSystem.Api.Controllers
             Console.WriteLine(dto.Password);
             if (account == null)
                 return Unauthorized(new { message = "Đăng nhập thất bại" });
-            
+
             var token = _authService.GenerateJwtToken(account);
             var refreshToken = _authService.GenerateRefreshToken();
             account.RefreshToken = refreshToken;
             account.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
             await _accountService.UpdateAsync(account);
 
+            Console.WriteLine("Token:" + token);
             return Ok(new
             {
                 token,
